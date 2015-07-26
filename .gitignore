@@ -11,5 +11,4 @@ bin-release/
 **/.idea/
 **/out/
 
-*.p12
 build.local.properties
