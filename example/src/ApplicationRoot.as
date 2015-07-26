@@ -56,6 +56,8 @@ package
         private function loginButtonTriggeredHandler(event:Event):void
         {
             CookieManagerExtension.getInstance().init();
+            var cookies:String = CookieManagerExtension.getInstance().getCookie("http://vk.com/");
+            trace("cookies " + cookies);
         }
 
         private function logouButtonTriggeredHandler(e:Event):void

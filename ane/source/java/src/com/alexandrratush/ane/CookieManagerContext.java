@@ -13,6 +13,7 @@ public class CookieManagerContext extends FREContext {
     public static final String KEY = "CookieManagerContext";
     public static final String INIT_FUNCTION = "init";
     public static final String REMOVE_ALL_COOKIE_FUNCTION = "removeAllCookie";
+    public static final String GET_COOKIE_FUNCTION = "getCookie";
 
     private CookieManager cookieManager;
 
@@ -27,6 +28,7 @@ public class CookieManagerContext extends FREContext {
         Map<String, FREFunction> map = new HashMap<>();
         map.put(INIT_FUNCTION, new InitFunction());
         map.put(REMOVE_ALL_COOKIE_FUNCTION, new RemoveAllCookieFunction());
+        map.put(GET_COOKIE_FUNCTION, new GetCookieFunction());
         return map;
     }
 
@@ -54,6 +56,23 @@ public class CookieManagerContext extends FREContext {
             } catch (NullPointerException e) {
                 Log.e(CookieManagerContext.KEY, REMOVE_ALL_COOKIE_FUNCTION, e);
                 context.dispatchStatusEventAsync(REMOVE_ALL_COOKIE_FUNCTION + ": " + e.getMessage(), CookieManagerExtension.ERROR_EVENT);
+            }
+
+            return null;
+        }
+    }
+
+    public class GetCookieFunction implements FREFunction {
+        @Override
+        public FREObject call(FREContext context, FREObject[] args) {
+            try {
+                String url = args[0].getAsString();
+                String cookies = cookieManager.getCookie(url);
+                Log.i(CookieManagerContext.KEY, GET_COOKIE_FUNCTION + " Cookies: " + cookies);
+                return FREObject.newObject(cookies);
+            } catch (Exception e) {
+                Log.e(CookieManagerContext.KEY, GET_COOKIE_FUNCTION, e);
+                context.dispatchStatusEventAsync(GET_COOKIE_FUNCTION + ": " + e.getMessage(), CookieManagerExtension.ERROR_EVENT);
             }
 
             return null;

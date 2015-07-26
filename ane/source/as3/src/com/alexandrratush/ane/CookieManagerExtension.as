@@ -11,9 +11,6 @@ package com.alexandrratush.ane
         public static const EXTENSION_ID:String = "com.alexandrratush.ane.CookieManager";
         public static const ERROR_EVENT:String = "error";
 
-        private static const INIT_FUNCTION:String = "init";
-        private static const REMOVE_ALL_COOKIE_FUNCTION:String = "removeAllCookie";
-
         private static var _instance:CookieManagerExtension;
         private static var _isConstructing:Boolean;
 
@@ -40,12 +37,20 @@ package com.alexandrratush.ane
 
         public function init():void
         {
-            _context.call(INIT_FUNCTION);
+            const FUNCTION:String = "init";
+            _context.call(FUNCTION);
         }
 
         public function removeAllCookie():void
         {
-            _context.call(REMOVE_ALL_COOKIE_FUNCTION);
+            const FUNCTION:String = "removeAllCookie";
+            _context.call(FUNCTION);
+        }
+
+        public function getCookie(url:String):String
+        {
+            const FUNCTION:String = "getCookie";
+            return _context.call(FUNCTION, url) as String;
         }
 
         private function onStatusEventHandler(e:StatusEvent):void
