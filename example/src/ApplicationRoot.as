@@ -1,18 +1,13 @@
 package
 {
-    import com.adobe.protocols.oauth2.OAuth2;
     import com.adobe.protocols.oauth2.event.GetAccessTokenEvent;
-    import com.adobe.protocols.oauth2.grant.IGrantType;
-    import com.adobe.protocols.oauth2.grant.ImplicitGrant;
     import com.alexandrratush.ane.CookieManagerExtension;
 
     import feathers.controls.Button;
     import feathers.controls.LayoutGroup;
+    import feathers.controls.TextArea;
     import feathers.layout.VerticalLayout;
     import feathers.themes.MetalWorksMobileTheme;
-
-    import flash.geom.Rectangle;
-    import flash.media.StageWebView;
 
     import starling.core.Starling;
     import starling.display.Sprite;
@@ -20,17 +15,11 @@ package
 
     public class ApplicationRoot extends Sprite
     {
-        private static const AUTH_END_POINT:String = "https://oauth.vk.com/authorize";
-        private static const TOKEN_END_POINT:String = "https://oauth.vk.com/token";
-        private static const REDIRECT_URI:String = "https://oauth.vk.com/blank.html";
-        private static const SCOPE:String = "friends,photos,status";
-        private static const APP_ID:String = "3961467";
-
         private var _group:LayoutGroup;
-        private var _vkLoginButton:Button;
-        private var _vkLogoutButton:Button;
-        private var _stageWebView:StageWebView;
-        private var _oauth2:OAuth2;
+        private var _authButton:Button;
+        private var _logoutButton:Button;
+        private var _textArea:TextArea;
+        private var _vkOauth:VKOauth;
 
         public function ApplicationRoot()
         {
@@ -48,6 +37,7 @@ package
             new MetalWorksMobileTheme();
 
             CookieManagerExtension.getInstance().init();
+            _vkOauth = new VKOauth(Starling.current.nativeStage);
 
             var verticalLayout:VerticalLayout = new VerticalLayout();
             verticalLayout.horizontalAlign = VerticalLayout.HORIZONTAL_ALIGN_CENTER;
@@ -58,70 +48,46 @@ package
             _group.layout = verticalLayout;
             addChild(_group);
 
-            _vkLoginButton = new Button();
-            _vkLoginButton.label = "Login";
-            _vkLoginButton.addEventListener(Event.TRIGGERED, loginButtonTriggeredHandler);
-            _group.addChild(_vkLoginButton);
+            _authButton = new Button();
+            _authButton.label = "Auth";
+            _authButton.addEventListener(Event.TRIGGERED, authButtonTriggeredHandler);
+            _group.addChild(_authButton);
 
-            _vkLogoutButton = new Button();
-            _vkLogoutButton.label = "Logout";
-            _vkLogoutButton.addEventListener(Event.TRIGGERED, logoutButtonTriggeredHandler);
-            _group.addChild(_vkLogoutButton);
+            _logoutButton = new Button();
+            _logoutButton.label = "Logout";
+            _logoutButton.addEventListener(Event.TRIGGERED, logoutButtonTriggeredHandler);
+            _group.addChild(_logoutButton);
+
+            _textArea = new TextArea();
+            _textArea.isEditable = false;
+            _group.addChild(_textArea);
 
             updatePositions(stage.stageWidth, stage.stageHeight);
         }
 
-        private function loginButtonTriggeredHandler(event:Event):void
+        private function authButtonTriggeredHandler(event:Event):void
         {
-            trace("cookies " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
-
-            if (StageWebView.isSupported)
-            {
-                _stageWebView = new StageWebView(true);
-                _stageWebView.stage = Starling.current.nativeStage;
-                _stageWebView.viewPort = new Rectangle(10, 10, stage.stageWidth - 20, stage.stageHeight - 20);
-                var grant:IGrantType = getGrant();
-                _oauth2 = new OAuth2(AUTH_END_POINT, TOKEN_END_POINT);
-                _oauth2.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessToken);
-                _oauth2.getAccessToken(grant);
-            }
+            _textArea.text += "Cookies: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/") + "\n";
+            _vkOauth.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessToken);
+            _vkOauth.auth();
         }
 
-        private function getGrant():ImplicitGrant
+        private function logoutButtonTriggeredHandler(e:Event):void
         {
-            var optionalParams:Object = {display: "mobile"};
-            return new ImplicitGrant(
-                    _stageWebView,
-                    APP_ID,
-                    REDIRECT_URI,
-                    SCOPE,
-                    null,
-                    optionalParams
-            );
+            CookieManagerExtension.getInstance().removeAllCookie();
+            _textArea.text += "Cookies: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/") + "\n";
         }
 
         private function onGetAccessToken(event:GetAccessTokenEvent):void
         {
             if (event.errorCode == null && event.errorMessage == null)
             {
-                trace("onGetAccessToken: accessToken = " + event.accessToken);
+                _textArea.text += "onGetAccessToken: complete\n";
             } else
             {
-                trace("onGetAccessToken: errorMessage " + event.errorMessage);
+                _textArea.text += "onGetAccessToken: error\n";
             }
-
-            _stageWebView.stage = null;
-            _stageWebView.viewPort = null;
-            _stageWebView.dispose();
-            _stageWebView = null;
-
-            trace("cookies " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
-        }
-
-        private function logoutButtonTriggeredHandler(e:Event):void
-        {
-            CookieManagerExtension.getInstance().removeAllCookie();
-            trace("cookies " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
+            _textArea.text += "Cookies: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/") + "\n";
         }
 
         private function updatePositions(width:int, height:int):void
