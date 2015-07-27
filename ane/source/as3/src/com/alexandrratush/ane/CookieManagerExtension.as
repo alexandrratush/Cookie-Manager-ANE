@@ -19,9 +19,7 @@ package com.alexandrratush.ane
         public function CookieManagerExtension()
         {
             if (!_isConstructing) throw new Error("Singleton, use CookieManagerExtension.getInstance()");
-//            if (!isSupported) throw new Error("CookieManagerExtension is not supported on this platform. Use CookieManagerExtension.isSupported getter.");
-            _context = ExtensionContext.createExtensionContext(EXTENSION_ID, "");
-            _context.addEventListener(StatusEvent.STATUS, onStatusEventHandler);
+            if (!isSupported) throw new Error("CookieManagerExtension is not supported on this platform. Use CookieManagerExtension.isSupported getter.");
         }
 
         public static function getInstance():CookieManagerExtension
@@ -38,7 +36,13 @@ package com.alexandrratush.ane
         public function init():void
         {
             const FUNCTION:String = "init";
-            _context.call(FUNCTION);
+
+            if (_context == null)
+            {
+                _context = ExtensionContext.createExtensionContext(EXTENSION_ID, "");
+                _context.addEventListener(StatusEvent.STATUS, onStatusEventHandler);
+                _context.call(FUNCTION);
+            }
         }
 
         public function removeAllCookie():void
