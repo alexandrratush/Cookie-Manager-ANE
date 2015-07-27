@@ -57,6 +57,12 @@ package com.alexandrratush.ane
             return _context.call(FUNCTION, url) as String;
         }
 
+        public function setCookie(url:String, value:String):void
+        {
+            const FUNCTION:String = "setCookie";
+            _context.call(FUNCTION, url, value);
+        }
+
         private function onStatusEventHandler(e:StatusEvent):void
         {
 
