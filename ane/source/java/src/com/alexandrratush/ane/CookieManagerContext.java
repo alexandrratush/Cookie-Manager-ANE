@@ -15,6 +15,7 @@ public class CookieManagerContext extends FREContext {
     public static final String REMOVE_ALL_COOKIE_FUNCTION = "removeAllCookie";
     public static final String GET_COOKIE_FUNCTION = "getCookie";
     public static final String SET_COOKIE_FUNCTION = "setCookie";
+    public static final String ACCEPT_COOKIE_FUNCTION = "acceptCookie";
 
     private CookieManager cookieManager;
 
@@ -31,6 +32,7 @@ public class CookieManagerContext extends FREContext {
         map.put(REMOVE_ALL_COOKIE_FUNCTION, new RemoveAllCookieFunction());
         map.put(GET_COOKIE_FUNCTION, new GetCookieFunction());
         map.put(SET_COOKIE_FUNCTION, new SetCookieFunction());
+        map.put(ACCEPT_COOKIE_FUNCTION, new AcceptCookieFunction());
         return map;
     }
 
@@ -91,6 +93,21 @@ public class CookieManagerContext extends FREContext {
             } catch (Exception e) {
                 Log.e(CookieManagerContext.KEY, SET_COOKIE_FUNCTION, e);
                 context.dispatchStatusEventAsync(SET_COOKIE_FUNCTION + ": " + e, CookieManagerExtension.ERROR_EVENT);
+            }
+
+            return null;
+        }
+    }
+
+    public class AcceptCookieFunction implements FREFunction {
+        @Override
+        public FREObject call(FREContext context, FREObject[] args) {
+            try {
+                Boolean acceptCookie = cookieManager.acceptCookie();
+                return FREObject.newObject(acceptCookie);
+            } catch (Exception e) {
+                Log.e(CookieManagerContext.KEY, ACCEPT_COOKIE_FUNCTION, e);
+                context.dispatchStatusEventAsync(ACCEPT_COOKIE_FUNCTION + ": " + e, CookieManagerExtension.ERROR_EVENT);
             }
 
             return null;

@@ -63,6 +63,12 @@ package com.alexandrratush.ane
             _context.call(FUNCTION, url, value);
         }
 
+        public function acceptCookie():Boolean
+        {
+            const FUNCTION:String = "acceptCookie";
+            return _context.call(FUNCTION);
+        }
+
         private function onStatusEventHandler(e:StatusEvent):void
         {
 
