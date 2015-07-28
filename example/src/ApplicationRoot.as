@@ -5,7 +5,6 @@ package
 
     import feathers.controls.Button;
     import feathers.controls.LayoutGroup;
-    import feathers.controls.TextArea;
     import feathers.layout.VerticalLayout;
     import feathers.themes.MetalWorksMobileTheme;
 
@@ -18,7 +17,6 @@ package
         private var _group:LayoutGroup;
         private var _authButton:Button;
         private var _logoutButton:Button;
-        private var _textArea:TextArea;
         private var _vkOauth:VKOauth;
 
         public function ApplicationRoot()
@@ -37,7 +35,9 @@ package
             new MetalWorksMobileTheme();
 
             CookieManagerExtension.getInstance().init();
+
             _vkOauth = new VKOauth(Starling.current.nativeStage);
+            _vkOauth.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessToken);
 
             var verticalLayout:VerticalLayout = new VerticalLayout();
             verticalLayout.horizontalAlign = VerticalLayout.HORIZONTAL_ALIGN_CENTER;
@@ -58,36 +58,27 @@ package
             _logoutButton.addEventListener(Event.TRIGGERED, logoutButtonTriggeredHandler);
             _group.addChild(_logoutButton);
 
-            _textArea = new TextArea();
-            _textArea.isEditable = false;
-            _group.addChild(_textArea);
-
             updatePositions(stage.stageWidth, stage.stageHeight);
         }
 
         private function authButtonTriggeredHandler(event:Event):void
         {
-            _textArea.text += "Cookies: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/") + "\n";
-            _vkOauth.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessToken);
             _vkOauth.auth();
         }
 
         private function logoutButtonTriggeredHandler(e:Event):void
         {
             CookieManagerExtension.getInstance().removeAllCookie();
-            _textArea.text += "Cookies: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/") + "\n";
         }
 
         private function onGetAccessToken(event:GetAccessTokenEvent):void
         {
             if (event.errorCode == null && event.errorMessage == null)
-            {
-                _textArea.text += "onGetAccessToken: complete\n";
-            } else
-            {
-                _textArea.text += "onGetAccessToken: error\n";
-            }
-            _textArea.text += "Cookies: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/") + "\n";
+                trace("onGetAccessToken: complete");
+            else
+                trace("onGetAccessToken: error");
+            
+            trace("Cookies: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
         }
 
         private function updatePositions(width:int, height:int):void
