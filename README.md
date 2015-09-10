@@ -4,7 +4,7 @@ Native Extension for Adobe AIR
 
 ####Using the ANE:
 
-* Add **[com.alexandrratush.ane.CookieManager.ane](https://github.com/alexandrratush/Cookie-Manager-ANE/tree/master/ane/bin)** file to your air project.
+* Add **[CookieManager.ane](https://github.com/alexandrratush/Cookie-Manager-ANE/tree/master/ane/bin)** file to your air project.
 
 * Add **com.alexandrratush.ane.CookieManager** extension id to your application descriptor file. For example:
 ```xml
