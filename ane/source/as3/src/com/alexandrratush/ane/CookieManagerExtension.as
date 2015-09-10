@@ -2,6 +2,7 @@ package com.alexandrratush.ane
 {
     import com.alexandrratush.ane.utils.SystemUtil;
 
+    import flash.events.ErrorEvent;
     import flash.events.EventDispatcher;
     import flash.events.StatusEvent;
     import flash.external.ExtensionContext;
@@ -77,7 +78,8 @@ package com.alexandrratush.ane
 
         private function onStatusEventHandler(e:StatusEvent):void
         {
-
+            if (e.level == ERROR_EVENT)
+                dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, e.code));
         }
 
         public function dispose():void
