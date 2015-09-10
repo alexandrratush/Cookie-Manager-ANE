@@ -2,11 +2,14 @@ package
 {
     import com.adobe.protocols.oauth2.event.GetAccessTokenEvent;
     import com.alexandrratush.ane.CookieManagerExtension;
+    import com.junkbyte.console.Cc;
 
     import feathers.controls.Button;
     import feathers.controls.LayoutGroup;
     import feathers.layout.VerticalLayout;
     import feathers.themes.MetalWorksMobileTheme;
+
+    import flash.events.ErrorEvent;
 
     import starling.core.Starling;
     import starling.display.Sprite;
@@ -34,7 +37,13 @@ package
         {
             new MetalWorksMobileTheme();
 
+            Cc.startOnStage(Starling.current.nativeStage, "");
+            Cc.visible = true;
+            Cc.width = Starling.current.nativeStage.stageWidth;
+            Cc.height = 100;
+
             CookieManagerExtension.getInstance().init();
+            CookieManagerExtension.getInstance().addEventListener(ErrorEvent.ERROR, onErrorEventHandler);
 
             _vkOauth = new VKOauth(Starling.current.nativeStage);
             _vkOauth.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessToken);
@@ -68,17 +77,25 @@ package
 
         private function logoutButtonTriggeredHandler(e:Event):void
         {
+            Cc.log("Cookies before remove: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
             CookieManagerExtension.getInstance().removeAllCookie();
+            Cc.log("Cookies after remove: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
         }
 
         private function onGetAccessToken(event:GetAccessTokenEvent):void
         {
             if (event.errorCode == null && event.errorMessage == null)
-                trace("onGetAccessToken: complete");
+                Cc.log("onGetAccessToken: complete");
             else
-                trace("onGetAccessToken: error");
-            
-            trace("Cookies: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
+                Cc.error("onGetAccessToken: error");
+
+            Cc.log("Cookies after auth: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
+        }
+
+        private function onErrorEventHandler(e:ErrorEvent):void
+        {
+            Cc.error("onErrorEventHandler: ");
+            Cc.explode(e);
         }
 
         private function updatePositions(width:int, height:int):void
