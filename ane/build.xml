@@ -33,7 +33,7 @@
 			target="${javac_target}"
 			bootclasspath="${rt_jar}"
 			failonerror="true"
-			srcdir="${java_source_path}"
+			srcdir="${android_source_path}"
 			destdir="temp/java_libs"
 			classpath="${fre_jar}:${android_jar}"
 			includeantruntime="false">
