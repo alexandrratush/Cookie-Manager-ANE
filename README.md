@@ -1,6 +1,6 @@
-Cookie Manager ANE
+Cookie Manager ANE (Android)
 =============================
-Native Extension for Adobe AIR (Android)
+Native Extension for Adobe AIR
 
 ####Using the ANE:
 
