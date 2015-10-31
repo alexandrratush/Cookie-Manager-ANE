@@ -10,56 +10,48 @@ package
     import flash.geom.Rectangle;
     import flash.media.StageWebView;
 
-    public class VKOauth extends EventDispatcher
+    public class OauthConnector extends EventDispatcher
     {
-        private static const AUTH_END_POINT:String = "https://oauth.vk.com/authorize";
-        private static const TOKEN_END_POINT:String = "https://oauth.vk.com/token";
-        private static const REDIRECT_URI:String = "https://oauth.vk.com/blank.html";
-        private static const SCOPE:String = "friends,photos,status";
-        private static const APP_ID:String = "3961467";
-
         private var _stageWebView:StageWebView;
         private var _oauth2:OAuth2;
         private var _stage:Stage;
 
-        public function VKOauth(stage:Stage)
+        public function OauthConnector(stage:Stage)
         {
             _stage = stage;
         }
 
-        public function auth():void
+        public function auth(authEndpoint:String, tokenEndpoint:String, appId:String, redirectURI:String, scope:String, params:Object):void
         {
             if (StageWebView.isSupported)
             {
                 _stageWebView = new StageWebView(true);
                 _stageWebView.stage = _stage;
                 _stageWebView.viewPort = new Rectangle(10, 10, _stage.stageWidth - 20, _stage.stageHeight - 20);
-                var grant:IGrantType = getGrant();
-                _oauth2 = new OAuth2(AUTH_END_POINT, TOKEN_END_POINT);
-                _oauth2.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessToken);
+                var grant:IGrantType = getGrant(appId, redirectURI, scope, params);
+                _oauth2 = new OAuth2(authEndpoint, tokenEndpoint);
+                _oauth2.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessTokenHandler);
                 _oauth2.getAccessToken(grant);
             }
         }
 
-        private function getGrant():ImplicitGrant
+        private function getGrant(appId:String, redirectURI:String, scope:String, params:Object):ImplicitGrant
         {
             return new ImplicitGrant(
                     _stageWebView,
-                    APP_ID,
-                    REDIRECT_URI,
-                    SCOPE,
+                    appId,
+                    redirectURI,
+                    scope,
                     null,
-                    {display: "mobile"}
+                    params
             );
         }
 
-        private function onGetAccessToken(event:GetAccessTokenEvent):void
+        private function onGetAccessTokenHandler(event:GetAccessTokenEvent):void
         {
             _stageWebView.stage = null;
-            _stageWebView.viewPort = null;
             _stageWebView.dispose();
             _stageWebView = null;
-
             dispatchEvent(event);
         }
     }
