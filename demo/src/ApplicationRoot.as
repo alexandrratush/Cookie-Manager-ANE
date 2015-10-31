@@ -20,7 +20,7 @@ package
         private var _group:LayoutGroup;
         private var _authVKButton:Button;
         private var _logoutVKButton:Button;
-        private var _vkOauth:OauthConnector;
+        private var _oauthConnector:OauthConnector;
 
         public function ApplicationRoot()
         {
@@ -42,8 +42,8 @@ package
             Cc.width = Starling.current.nativeStage.stageWidth;
             Cc.height = 100;
 
-            _vkOauth = new OauthConnector(Starling.current.nativeStage);
-            _vkOauth.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessToken);
+            _oauthConnector = new OauthConnector(Starling.current.nativeStage);
+            _oauthConnector.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessToken);
 
             var verticalLayout:VerticalLayout = new VerticalLayout();
             verticalLayout.horizontalAlign = VerticalLayout.HORIZONTAL_ALIGN_CENTER;
@@ -80,7 +80,7 @@ package
 
         private function authButtonTriggeredHandler(event:Event):void
         {
-            _vkOauth.auth(SocialData.VK_AUTH_END_POINT,
+            _oauthConnector.auth(SocialData.VK_AUTH_END_POINT,
                     SocialData.VK_TOKEN_END_POINT,
                     SocialData.VK_APP_ID,
                     SocialData.VK_REDIRECT_URI,
