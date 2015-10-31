@@ -4,6 +4,7 @@ package
     import com.adobe.protocols.oauth2.event.GetAccessTokenEvent;
     import com.adobe.protocols.oauth2.grant.IGrantType;
     import com.adobe.protocols.oauth2.grant.ImplicitGrant;
+    import com.junkbyte.console.Cc;
 
     import flash.display.Stage;
     import flash.events.EventDispatcher;
@@ -32,6 +33,9 @@ package
                 _oauth2 = new OAuth2(authEndpoint, tokenEndpoint);
                 _oauth2.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessTokenHandler);
                 _oauth2.getAccessToken(grant);
+            } else
+            {
+                Cc.error("StageWebView is not supported");
             }
         }
 
