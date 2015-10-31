@@ -18,8 +18,8 @@ package
     public class ApplicationRoot extends Sprite
     {
         private var _group:LayoutGroup;
-        private var _authButton:Button;
-        private var _logoutButton:Button;
+        private var _authVKButton:Button;
+        private var _logoutVKButton:Button;
         private var _vkOauth:VKOauth;
 
         public function ApplicationRoot()
@@ -42,9 +42,6 @@ package
             Cc.width = Starling.current.nativeStage.stageWidth;
             Cc.height = 100;
 
-            CookieManagerExtension.getInstance().init();
-            CookieManagerExtension.getInstance().addEventListener(ErrorEvent.ERROR, onErrorEventHandler);
-
             _vkOauth = new VKOauth(Starling.current.nativeStage);
             _vkOauth.addEventListener(GetAccessTokenEvent.TYPE, onGetAccessToken);
 
@@ -55,19 +52,30 @@ package
 
             _group = new LayoutGroup();
             _group.layout = verticalLayout;
+            _group.width = stage.stageWidth;
+            _group.height = stage.stageHeight;
             addChild(_group);
 
-            _authButton = new Button();
-            _authButton.label = "Auth";
-            _authButton.addEventListener(Event.TRIGGERED, authButtonTriggeredHandler);
-            _group.addChild(_authButton);
+            _authVKButton = new Button();
+            _authVKButton.label = "Auth with VK";
+            _authVKButton.addEventListener(Event.TRIGGERED, authButtonTriggeredHandler);
+            _group.addChild(_authVKButton);
 
-            _logoutButton = new Button();
-            _logoutButton.label = "Logout";
-            _logoutButton.addEventListener(Event.TRIGGERED, logoutButtonTriggeredHandler);
-            _group.addChild(_logoutButton);
+            _logoutVKButton = new Button();
+            _logoutVKButton.label = "Logout VK";
+            _logoutVKButton.addEventListener(Event.TRIGGERED, logoutButtonTriggeredHandler);
+            _group.addChild(_logoutVKButton);
 
-            updatePositions(stage.stageWidth, stage.stageHeight);
+            if (CookieManagerExtension.isSupported)
+            {
+                CookieManagerExtension.getInstance().init();
+                CookieManagerExtension.getInstance().addEventListener(ErrorEvent.ERROR, onErrorEventHandler);
+            } else
+            {
+                Cc.log("CookieManagerExtension is not supported");
+                _authVKButton.isEnabled = false;
+                _logoutVKButton.isEnabled = false;
+            }
         }
 
         private function authButtonTriggeredHandler(event:Event):void
@@ -96,13 +104,6 @@ package
         {
             Cc.error("onErrorEventHandler: ");
             Cc.explode(e);
-        }
-
-        private function updatePositions(width:int, height:int):void
-        {
-            _group.validate();
-            _group.x = (width - _group.width) / 2;
-            _group.y = (height - _group.height) / 2;
         }
     }
 }
