@@ -91,7 +91,6 @@ package
 
         private function logoutButtonTriggeredHandler(e:Event):void
         {
-            Cc.log("Cookies before remove: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
             CookieManagerExtension.getInstance().removeAllCookie();
             Cc.log("Cookies after remove: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
         }
