@@ -2,4 +2,6 @@
 **/.idea/
 **/out/
 
-build.properties
+ane/build.properties
+demo/build.properties
+sdk.properties
