@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="Flex" version="4">
-  <component name="FlexBuildConfigurationManager" active="ToastExtensionSrc">
+  <component name="FlexBuildConfigurationManager" active="ExtensionSrc">
     <configurations>
-      <configuration name="ToastExtensionSrc" target-platform="Mobile" pure-as="true" output-file="ToastExtensionSrc.swf" output-folder="$MODULE_DIR$/out/production/ToastExtensionSrc">
+      <configuration name="ExtensionSrc" target-platform="Mobile" pure-as="true" output-file="ToastExtensionSrc.swf" output-folder="$MODULE_DIR$/out/production/ToastExtensionSrc">
         <dependencies target-player="18.0">
           <sdk name="AIRSDK_18.0" />
         </dependencies>
