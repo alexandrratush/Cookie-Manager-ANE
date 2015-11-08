@@ -1,9 +1,9 @@
 # IntelliJ
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/dictionaries
-.idea/shelf
-/out/
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+**/.idea/dictionaries
+**/.idea/shelf
+**/out/
 
 # ant properties files
 ane/build.properties
