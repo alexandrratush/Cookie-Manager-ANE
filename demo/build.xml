@@ -1,8 +1,7 @@
 <project name="Build and install demo project" default="android" basedir=".">
 
-	<!-- SDKs properties -->
+	<property environment="env"/>
 	<property file="../sdk.properties"/>
-	<!-- project properties -->
 	<property file="build.properties"/>
 	
 	<target name="build_android" depends="build_swf"  description="Build android apk">
