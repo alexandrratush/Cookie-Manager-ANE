@@ -17,7 +17,10 @@ Native Extension for Adobe AIR
 ####Code example:
 
 ```ActionScript
-CookieManagerExtension.getInstance().init();
-trace("Cookies: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
-CookieManagerExtension.getInstance().removeAllCookie();
+if (CookieManagerExtension.isSupported)
+{
+	CookieManagerExtension.getInstance().init();
+	trace("Cookies: " + CookieManagerExtension.getInstance().getCookie("http://vk.com/"));
+	CookieManagerExtension.getInstance().removeAllCookie();
+}
 ```
