@@ -1,3 +1,4 @@
 #### Build guide:
-To build demo project, rename **build.properties.sample** file to **build.properties** and change the required parameters.
+To build ane, rename **build.properties.sample** file to **build.properties**, and [**sdk.properties.sample**](../sdk.properties.sample) to **sdk.properties**.
+Change the required parameters in both files.
 Execute **ant android** command in your console.
