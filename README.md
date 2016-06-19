@@ -1,5 +1,7 @@
 #Cookie Manager ANE (Android)
 [![Build Status](https://travis-ci.org/alexandrratush/Cookie-Manager-ANE.svg?branch=master)](https://travis-ci.org/alexandrratush/Cookie-Manager-ANE)
+[![GitHub version](https://badge.fury.io/gh/alexandrratush%2FCookie-Manager-ANE.svg)](https://badge.fury.io/gh/alexandrratush%2FCookie-Manager-ANE)
+![](https://reposs.herokuapp.com/?path=alexandrratush/Cookie-Manager-ANE&style=flat)
 ######Native Extension for Adobe AIR
 ###Using the ANE:
 
